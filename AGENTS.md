@@ -824,8 +824,103 @@ For the most up-to-date information, always refer to the official documentation 
 
 · https://ai-sdk.dev/
 · https://webcontainers.io/
-· https://ai.google.dev/gemini-api/docs
+· https://ai.google.dev/gemini-api/docs# Wireable: Project Blueprint
 
+## 1. Project Vision & Goal
+
+Wireable is a platform for building AI-powered applications and agents. It leverages a modern TypeScript-based AI SDK to provide a seamless development experience for creating rich, interactive, and intelligent user interfaces. The core goal is to standardize the process of integrating AI models, allowing developers to focus on application logic and user experience rather than the underlying technical complexities.
+
+The project will provide a toolkit and a component library to build AI-native applications faster, with a focus on React, Next.js, and other modern web frameworks.
+
+## 2. Core Technologies
+
+The Wireable project will be built upon the following core technologies:
+
+*   **AI SDK:** A TypeScript toolkit for building AI applications. It will be the foundation for all AI model interactions.
+    *   **Supported Providers:** OpenAI, Anthropic, Google Gemini, xAI, and custom providers.
+*   **AI Elements:** A React component library built on `shadcn/ui` for rapidly creating AI-native user interfaces.
+*   **WebContainers:** A browser-based runtime for executing Node.js applications, enabling interactive coding experiences directly within the Wireable platform.
+*   **Frameworks:** Primarily targeting React and Next.js, with potential support for Vue and Svelte.
+
+## 3. Architectural Overview
+
+The architecture will be divided into two main parts: the core AI logic and the user interface.
+
+### 3.1. AI Core (via AI SDK)
+
+This layer will handle all interactions with AI models.
+
+*   **Text Generation:** Using `generateText` for basic AI responses.
+*   **Structured Data Generation:** A key feature will be the ability to generate structured data from natural language prompts using `generateObject` and `streamObject`. This will power many of the platform's dynamic features.
+    *   **Schema Definition:** We will use `zod` for defining data schemas.
+    *   **Output Strategies:** The system will support various output strategies including `array`, `enum`, and `no-schema` to handle different use cases like classification and list generation.
+*   **Reasoning Access:** The platform will expose the model's reasoning process to the user, providing transparency and insight into the AI's "thought process".
+*   **Error Handling & JSON Repair:** Robust error handling for AI generation failures (`NoObjectGeneratedError`) and experimental JSON repair features will be implemented to ensure stability.
+
+### 3.2. Frontend (via AI Elements & UI SDK)
+
+The frontend will be built using React and Next.js, leveraging the AI Elements component library.
+
+*   **Core UI Components:**
+    *   `Conversation`: For building multi-turn chat interfaces.
+    *   `Message`: For displaying individual user or assistant messages.
+    *   `CodeBlock`: For rendering syntax-highlighted code with copy functionality.
+    *   `Reasoning`: To visually display the model's reasoning steps.
+    *   `PromptInput`: An enhanced input component for user prompts.
+    *   `WebPreview`: An embedded browser for previewing web applications, powered by WebContainers.
+*   **Generative UI:** We will explore creating dynamic, generative user interfaces where the AI can stream structured data that directly renders as React components.
+
+## 4. Key Features & Implementation Plan
+
+### 4.1. Feature: Interactive AI Chat Interface
+
+*   **Description:** A core chat interface for users to interact with AI models.
+*   **Implementation:**
+    *   Use the `useChat` hook from `ai/react`.
+    *   Construct the UI using `Conversation` and `Message` components from AI Elements.
+    *   Implement backend logic to stream responses from a chosen AI provider.
+
+### 4.2. Feature: Structured Data Generator
+
+*   **Description:** A tool that allows users to define a data structure (using a UI or by providing a Zod schema) and generate instances of that structure from a natural language prompt.
+*   **Implementation:**
+    *   Use `generateObject` for single-shot generation.
+    *   Use `streamObject` to show the data being generated in real-time.
+    *   The UI will display the generated object/data, potentially with a view of the model's reasoning (`Reasoning` component).
+
+### 4.3. Feature: In-Browser Code Execution & Previews
+
+*   **Description:** Allow users to generate code and run it within a secure, in-browser environment. This is ideal for tutorials, documentation, and interactive coding assistants.
+*   **Implementation:**
+    *   Integrate **WebContainers** to create a browser-based Node.js runtime.
+    *   The AI will generate code which will be written to the WebContainer's virtual file system.
+    *   Dependencies will be installed programmatically (`npm`, `yarn`).
+    *   A development server will be run inside the container.
+    *   The `WebPreview` component from AI Elements will be used to display the running application.
+
+### 4.4. Feature: Direct Gemini API Integration
+
+*   **Description:** Provide specialized tools and interfaces for leveraging the Google Gemini API's unique features.
+*   **Implementation:**
+    *   Use the `@google/genai` SDK for backend integration.
+    *   Support Gemini's native JSON output mode for reliable structured data.
+    *   Build UI to handle multimodal inputs (e.g., uploading an image and asking a question about it).
+
+## 5. Development Best Practices
+
+The project will adhere to the following best practices, derived from the AI SDK documentation.
+
+*   **Performance:** Prioritize streaming for all interactive UI to ensure a responsive user experience.
+*   **Error Handling:** Implement robust error handling, especially for AI generation failures, with user-friendly fallbacks.
+*   **Security:**
+    *   API keys must be managed securely on the backend and never exposed on the client-side.
+    *   All structured data generated by the AI must be validated against its schema before use.
+    *   Implement rate limiting to prevent abuse.
+
+## 6. Deployment
+
+*   **Platform:** Vercel is the recommended deployment platform for its seamless integration with Next.js.
+*   **Configuration:** Environment variables for API keys (`GEMINI_API_KEY`, `OPENAI_API_KEY`, etc.) will be managed through Vercel's dashboard.
 ```
 
 This structured `llms.txt` file provides a comprehensive reference that combines information from all the relevant search results, with proper citations throughout. You can use this file with LLMs by including it in the context as shown in the documentation examples.
